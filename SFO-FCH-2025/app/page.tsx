@@ -9,14 +9,9 @@ import { useRouter } from "next/navigation";
 
 const steps = [
 	{
-		title: "Background Check",
-		description: "Conduct comprehensive background screening and review.",
-		icon: <FileText className="w-6 h-6" />,
-	},
-	{
-		title: "Adverse Action Notice",
-		description: "Issue preliminary adverse action notification if required.",
-		icon: <AlertTriangle className="w-6 h-6" />,
+		title: "Assessment",
+		description: "Evaluate conviction history in relation to job duties.",
+		icon: <ClipboardList className="w-6 h-6" />,
 	},
 	{
 		title: "Candidate Response",
@@ -24,9 +19,9 @@ const steps = [
 		icon: <User className="w-6 h-6" />,
 	},
 	{
-		title: "De-risking Process",
-		description: "Evaluate mitigation factors and rehabilitation evidence.",
-		icon: <Users className="w-6 h-6" />,
+		title: "Reassessment",
+		description: "Review candidate input and reassess decision.",
+		icon: <AlertTriangle className="w-6 h-6" />,
 	},
 	{
 		title: "Final Decision",
@@ -52,8 +47,8 @@ export default function Home() {
 			</div>
 			<div className="mx-auto max-w-7xl space-y-8 px-8 pb-8">
 				<h1 className="text-4xl font-bold text-foreground">
-					Post Background Check Process:{" "}
-					<span className="text-cinnabar">Oklahoma</span>
+					Fair Chance Hiring Compliance Platform Demo:{" "}
+					<span className="text-cinnabar">San Francisco</span>
 				</h1>
 				<div className="flex gap-8">
 					{/* Legal Overview Panel */}
@@ -61,58 +56,31 @@ export default function Home() {
 						<CardHeader>
 							<CardTitle className="flex items-center gap-2 text-foreground">
                 <Scale className="h-5 w-5 text-cinnabar" />
-								Legal Intelligence
+								Fair Chance Ordinance Legal Overview
 							</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<p className="text-gray35">
-								Oklahoma's "Ban the Box" law, initiated by a 2016 Executive Order, applies only to state agencies, prohibiting them from asking about criminal history on job applications but allowing inquiries later in the hiring process, after a conditional offer of employment.
+								San Francisco's Fair Chance Ordinance promotes compliant hiring
+								practices by regulating how employers use arrest and conviction
+								records in employment decisions.
 							</p>
-
-							<div className="space-y-4">
-								<div className="space-y-2">
-									<Button
-										variant="outline"
-										className="w-full border-cinnabar text-cinnabar hover:bg-cinnabar hover:text-white transition font-poppins"
-										onClick={() => router.push("/ordinance")}
-									>
-										View Oklahoma Ban-the-Box Law
-									</Button>
-									<p className="text-xs text-gray-500 text-center px-2">
-										Applies to Oklahoma state agency positions and hiring processes.
-									</p>
-								</div>
-								<div className="space-y-2">
-									<Button
-										asChild
-										variant="outline"
-										className="w-full border-cinnabar text-cinnabar hover:bg-cinnabar hover:text-white transition font-poppins"
-									>
-										<a
-											href="https://www.congress.gov/bill/116th-congress/senate-bill/387/text"
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											5 U.S. Code Chapter 92 Part III Subpart H
-										</a>
-									</Button>
-									<p className="text-xs text-gray-500 text-center px-2">
-										Federal law for companies with federal contracts.
-									</p>
-								</div>
-								<div className="space-y-2">
-									<Button
-										variant="outline"
-										className="w-full border-cinnabar text-cinnabar hover:bg-cinnabar hover:text-white transition font-poppins"
-										onClick={() => router.push("/tulsa-executive-order")}
-									>
-										Tulsa Ban-the-Box: EXECUTIVE ORDER NO.2016-4
-									</Button>
-									<p className="text-xs text-gray-500 text-center px-2">
-										City of Tulsa executive order applying Ban-the-Box to municipal positions.
-									</p>
-								</div>
+							<div className="space-y-2">
+								<h3 className="font-semibold text-gray35">Key Requirements:</h3>
+								<ul className="list-disc pl-5 space-y-1 text-sm text-foreground font-poppins">
+									<li>Background checks only after conditional offer</li>
+									<li>Individualized assessment required</li>
+									<li>7-day candidate response period</li>
+									<li>3-year record retention mandate</li>
+								</ul>
 							</div>
+							<Button
+								variant="outline"
+								className="w-full border-cinnabar text-cinnabar hover:bg-cinnabar hover:text-white transition font-poppins"
+								onClick={() => router.push("/ordinance")}
+							>
+								View Full San Francisco Fair Chance Ordinance
+							</Button>
 						</CardContent>
 					</Card>
 
@@ -127,7 +95,7 @@ export default function Home() {
 					  <CardContent className="space-y-4">
 					    <p className="text-gray35">
 					      Start a structured workflow to evaluate conviction history in
-					      compliance with Oklahoma Ban-the-Box requirements. This process will guide
+					      compliance with Fair Chance requirements. This process will guide
 					      you through:
 					    </p>
 					    {/* Steps Row (Icons + Arrows) */}
@@ -148,6 +116,9 @@ export default function Home() {
 					            </div>
 					            <span className="text-lg font-bold text-foreground text-center break-words leading-tight mt-2 max-w-[200px]">
 					              {step.title}
+					            </span>
+					            <span className="text-sm text-gray35 text-center block max-w-[340px] mt-2">
+					              {step.description}
 					            </span>
 					          </div>
 					        ))}
@@ -180,42 +151,13 @@ export default function Home() {
 					    </div>
 					    <Button
 					      className="w-full bg-cinnabar text-white hover:bg-cinnabar-600 transition font-poppins"
-					      onClick={() => router.push("/assessment/setup")}
+					      onClick={() => router.push("/assessment")}
 					    >
 					      Begin New Assessment Demo
 					    </Button>
 					  </CardContent>
 					</Card>
 				</div>
-
-				{/* Work Opportunity Tax Credits Card */}
-				<Card className="mt-8 bg-background text-foreground border border-border shadow-sm rounded-lg">
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2 text-foreground">
-							<FileText className="h-5 w-5 text-cinnabar" />
-							Work Opportunity Tax Credits (WOTC)
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						<p className="text-gray35">
-							The Work Opportunity Tax Credit (WOTC) is a federal tax credit available to employers who hire individuals from certain targeted groups who have consistently faced significant barriers to employment.
-						</p>
-						<Button
-							asChild
-							variant="outline"
-							className="w-full border-cinnabar text-cinnabar hover:bg-cinnabar hover:text-white transition font-poppins"
-						>
-							<a
-								href="https://wotc.rezmedemo.com/"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Access WOTC Platform
-							</a>
-						</Button>
-					</CardContent>
-				</Card>
-
 				{/* Candidate Portal Card */}
 				<Card className="mt-8 bg-background text-foreground border border-border shadow-sm rounded-lg">
 					<CardHeader>
@@ -226,7 +168,9 @@ export default function Home() {
 					</CardHeader>
 					<CardContent className="space-y-4">
 						<p className="text-gray35">
-							A dedicated portal for candidates to share evidence of rehabilitation and employability with specialized screening pathways for work release programs, reentry organizations, rehabilitation centers, and diversion initiatives.
+							A dedicated portal for candidates to view, update, and share their
+							restorative justice and rehabilitation records as part of the Fair
+							Chance hiring process.
 						</p>
 						<Button
 							asChild
@@ -234,7 +178,7 @@ export default function Home() {
 							variant="outline"
 						>
 							<a
-								href="https://candidate.rezme.app/"
+								href="https://cornell.restorativerecord.com/"
 								target="_blank"
 								rel="noopener noreferrer"
 							>

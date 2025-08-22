@@ -52,10 +52,13 @@ export default function AssessmentEvaluate() {
   const [showWOTCSigningScreen, setShowWOTCSigningScreen] = useState(false);
   const [steps, setSteps] = useState<Step[]>([
     { id: 1, title: "Confirm Conditional Offer", completed: false },
-    { id: 2, title: "Background Check Guidance", completed: false },
+    { id: 2, title: "Validate Document Basis", completed: false },
     { id: 3, title: "Direct Job-Relation Inquiry", completed: false },
-    { id: 4, title: "Evidence of Rehabilitation", completed: false },
-    { id: 5, title: "Final Decision", completed: false },
+    { id: 4, title: "Time Elapsed Analysis", completed: false },
+    { id: 5, title: "Evidence of Rehabilitation", completed: false },
+    { id: 6, title: "Assessment Summary", completed: false },
+    { id: 7, title: "Candidate Notification", completed: false },
+    { id: 8, title: "Final Decision", completed: false },
   ]);
 
   const [hasConditionalOffer, setHasConditionalOffer] = useState<string | null>(null);
@@ -152,7 +155,23 @@ export default function AssessmentEvaluate() {
   }, []);
 
   const handleStepClick = (stepId: number) => {
-    // Allow free navigation between any steps
+    const previousStepsCompleted = steps
+      .filter(step => step.id < stepId)
+      .every(step => step.completed);
+
+    if (!previousStepsCompleted) {
+      toast({
+        title: "Cannot Skip Steps",
+        description: "Please complete the previous steps before proceeding.",
+      });
+      return;
+    }
+
+    if (stepId > 1 && hasConditionalOffer === "no") {
+      setShowBlockingDialog(true);
+      return;
+    }
+
     setCurrentStep(stepId);
   };
 
@@ -237,7 +256,7 @@ export default function AssessmentEvaluate() {
           <div className="space-y-4">
             <h3 className="font-semibold">SEC. 4904 subsections (a)(1)-(7)</h3>
             <p className="text-sm text-muted-foreground mb-2">
-              Oklahoma's Ban-the-Box law prohibits covered employers from ever considering the following:
+              The FCO prohibits covered employers from ever considering the following:
             </p>
             <ul className="text-sm text-muted-foreground space-y-2">
               <li>• An arrest not leading to a conviction, except for unresolved arrests</li>
@@ -264,6 +283,22 @@ export default function AssessmentEvaluate() {
           </div>
         );
       case 4:
+        return (
+          <div className="space-y-4">
+            <h3 className="font-semibold">Time Elapsed Restrictions</h3>
+            <p className="text-sm text-muted-foreground mb-2">
+              The Fair Chance Ordinance (FCO) prohibits covered employers from ever considering the following:
+            </p>
+            <p className="text-sm text-muted-foreground mb-4">
+              A conviction that is more than 7 years old (unless the position being considered supervises minors or dependent adults).
+            </p>
+            <h3 className="font-semibold">SEC. 4904. (5)</h3>
+            <p className="text-sm text-muted-foreground">
+              A Conviction that is more than seven years old, the date of Conviction being the date of sentencing, except that this restriction and any limitations imposed in this Article 49 based on the limitation in this subsection (a)(5) shall not apply where the applicant or employee is or will be (A) providing services to or have supervisory or disciplinary authority over a minor, (B) providing services to or have supervisory or disciplinary authority over a "dependent adult," as that phrase is defined in California Welfare and Institutions Code Section 15610.23 or any successor state law, or (C) providing support services or care to or has supervisory authority over a person 65 years or older;
+            </p>
+          </div>
+        );
+      case 5:
         return (
           <div className="space-y-4">
             <h3 className="font-semibold">SEC. 4903. DEFINITIONS</h3>
@@ -301,7 +336,19 @@ export default function AssessmentEvaluate() {
             </p>
           </div>
         );
-      case 5:
+      case 6:
+        return (
+          <div className="space-y-4">
+            <h3 className="font-semibold">SEC. 4910. EMPLOYER RECORDS</h3>
+            <p className="text-sm text-muted-foreground">
+              (a) An Employer shall retain records of employment, application forms, and other pertinent data and records required under this Article, for a period of three years, and shall allow the OLSE access to such records, with appropriate notice and at a mutually agreeable time, to monitor compliance with the requirements of this Article.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              (d) Where an Employer does not maintain or retain adequate records documenting compliance with this Article or does not allow the OLSE reasonable access to such records, it shall be presumed that the Employer did not comply with this Article, absent clear and convincing evidence otherwise.
+            </p>
+          </div>
+        );
+      case 8:
         return (
           <div className="space-y-4">
             <h3 className="font-semibold">SEC. 4904 (f), (g), (i)</h3>
@@ -343,7 +390,7 @@ export default function AssessmentEvaluate() {
             </p>
           </div>
         );
-        case 4:
+        case 5:
         return (
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
@@ -351,11 +398,27 @@ export default function AssessmentEvaluate() {
             </p>
           </div>
         );
-        case 5:
+        case 6:
         return (
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
-            We are committed to fair hiring practices and fully adheres to the requirements set forth by the Oklahoma Department of Labor under the Ban-the-Box law. This includes providing applicants with automated notice of their right to file a complaint with the appropriate agency if they believe we are not in compliance with the law.
+            Pursuant to the San Francisco Fair Chance Ordinance, we consider for employment qualified applicants with arrest and conviction records.
+            </p>
+          </div>
+        );
+        case 7:
+        return (
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+            Before taking adverse action such as failing/refusing to hire, discharging, or not promoting an individual based on a conviction history or unresolved arrest, we give the candidate an opportunity to present evidence that the information is inaccurate, that they have been rehabilitated, or other mitigating factors.
+            </p>
+          </div>
+        );
+        case 8:
+        return (
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+            We are committed to fair hiring practices and fully adheres to the requirements set forth by the San Francisco Office of Labor Standards Enforcement (OLSE) under the Fair Chance Ordinance (FCO). This includes providing applicants with automated notice of their right to file a complaint with the OLSE if they believe we are not in compliance with the law.
             </p>
           </div>
         );
@@ -363,7 +426,7 @@ export default function AssessmentEvaluate() {
           return (
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Record date of conviction and completion of sentence; calculate years elapsed. Highlight whether ≥ 7 yrs have passed (Oklahoma law safe‑harbor unless role supervises minors/dependent adults).
+              Record date of conviction and completion of sentence; calculate years elapsed. Highlight whether ≥ 7 yrs have passed (FCO safe‑harbor unless role supervises minors/dependent adults).
             </p>
           </div>
         );
@@ -448,6 +511,20 @@ export default function AssessmentEvaluate() {
       case 4:
         return (
           <div className="space-y-4">
+            <h3 className="font-semibold">Time Elapsed Since Offense & Completion of Sentence</h3>
+            <ul className="text-sm text-muted-foreground space-y-2">
+              <li>• Conviction Date to Present: ~ 7 years (86 months)</li>
+              <li>• Release to Present: ~ 23 months</li>
+              <li>• Completion of Supervision to Present: &lt; 1 month (fully resolved)</li>
+            </ul>
+            <p className="text-sm text-muted-foreground mt-4">
+              The substantial passage of time and successful completion of supervision signal reduced recidivism risk under established criminogenic‑need models.
+            </p>
+          </div>
+        );
+      case 5:
+        return (
+          <div className="space-y-4">
             <h3 className="font-semibold">Evidence of Rehabilitation & Good Conduct</h3>
             <div className="space-y-4">
               <div>
@@ -518,14 +595,14 @@ export default function AssessmentEvaluate() {
             <li>Notify you that this conditional job offer has become final; or</li>
             <li>Notify you in writing that we intend to revoke (take back) this job offer because of your conviction history.</li>
           </ul>
-          <p>As required by Oklahoma law, we will NOT consider any of the following information:</p>
+          <p>As required by California law, we will NOT consider any of the following information:</p>
           <ul className="list-disc pl-5 space-y-2">
             <li>Arrest not followed by conviction;</li>
             <li>Referral to or participation in a pretrial or posttrial diversion program; or</li>
             <li>Convictions that have been sealed, dismissed, expunged, or pardoned.</li>
           </ul>
           <p>
-            As required by Oklahoma's Ban-the-Box law, we will consider whether your conviction history is directly related 
+            As required by the California Fair Chance Act, we will consider whether your conviction history is directly related 
             to the duties of the job we have offered you. We will consider all of the following:
           </p>
           <ul className="list-disc pl-5 space-y-2">
@@ -778,21 +855,22 @@ export default function AssessmentEvaluate() {
           <div className="space-y-4">
             <p className="font-semibold">Your Right to File a Complaint:</p>
             <p>
-              If you believe your rights under Oklahoma's Ban-the-Box law have been violated during this job
-              application process, you have the right to file a complaint with the Oklahoma Department of Labor.
+              If you believe your rights under the California Fair Chance Act have been violated during this job
+              application process, you have the right to file a complaint with the Civil Rights Department (CRD).
             </p>
             <p>There are several ways to file a complaint:</p>
             <ul className="list-disc pl-5 space-y-2">
-              <li>Contact the Oklahoma Department of Labor directly</li>
+              <li>File a complaint online at: ccrs.calcivilrights.ca.gov/s/</li>
               <li>
-                Visit the Oklahoma Department of Labor website at www.labor.ok.gov for complaint forms and procedures
+                Download an intake form at: calcivilrights.ca.gov/complaintprocess/filebymail/ and email it to
+                contact.center@calcivilrights.gov or mail it to 2218 Kausen Drive, Suite 100, Elk Grove, CA 95758.
               </li>
               <li>
-                Call the Oklahoma Department of Labor at (405) 521-6100
+                Visit a CRD office. For office locations: calcivilrights.ca.gov/locations/
               </li>
             </ul>
             <p>
-              For more information about your rights under Oklahoma's Ban-the-Box law, contact the Oklahoma Department of Labor.
+              For more information, visit calcivilrights.ca.gov/complaintprocess/ or call (800) 884-1684.
             </p>
           </div>
         </div>
@@ -999,7 +1077,7 @@ export default function AssessmentEvaluate() {
       case 2:
         return (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Background Check Guidance</h2>
+            <h2 className="text-2xl font-bold">Validate Document Basis</h2>
             <p className="text-muted-foreground">
               Review the following criteria to ensure only legally permissible information is considered.
             </p>
@@ -1123,6 +1201,27 @@ export default function AssessmentEvaluate() {
       case 4:
         return (
           <div className="space-y-6">
+            <h2 className="text-2xl font-bold">Time Elapsed Analysis</h2>
+            <Select
+              value={timeElapsed}
+              onValueChange={setTimeElapsed}
+            >
+              <SelectTrigger className="bg-white">
+                <SelectValue placeholder="Select time elapsed since offense" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                <SelectItem value="less-than-1">Less than 1 year</SelectItem>
+                <SelectItem value="1-3">1-3 years</SelectItem>
+                <SelectItem value="3-7">3-7 years</SelectItem>
+                <SelectItem value="more-than-7">More than 7 years</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        );
+
+      case 5:
+        return (
+          <div className="space-y-6">
             <h2 className="text-2xl font-bold">Evidence of Rehabilitation</h2>
             <RadioGroup
               value={rehabilitation.hasEvidence === null ? "" : rehabilitation.hasEvidence.toString()}
@@ -1151,7 +1250,72 @@ export default function AssessmentEvaluate() {
           </div>
         );
 
-      case 5:
+      case 6:
+        return (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold">Assessment Summary</h2>
+            <div className="space-y-4">
+              <div className="rounded-lg border p-4">
+                <h3 className="font-semibold mb-2">Job-relatedness</h3>
+                <p>{jobRelation.isRelated ? "Directly related" : "Not directly related"}</p>
+                {jobRelation.isRelated && (
+                  <>
+                    <p className="text-sm text-muted-foreground mt-2">Related duties:</p>
+                    <ul className="list-disc pl-5">
+                      {jobRelation.duties.map(duty => (
+                        <li key={duty}>{duty}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </div>
+
+              <div className="rounded-lg border p-4">
+                <h3 className="font-semibold mb-2">Time Elapsed</h3>
+                <p>{timeElapsed.replace("-", " to ")}</p>
+              </div>
+
+              <div className="rounded-lg border p-4">
+                <h3 className="font-semibold mb-2">Rehabilitation Evidence</h3>
+                <p>{rehabilitation.hasEvidence ? "Evidence provided" : "No evidence provided"}</p>
+                {rehabilitation.notes && (
+                  <p className="text-sm text-muted-foreground mt-2">{rehabilitation.notes}</p>
+                )}
+              </div>
+
+              <div className="flex items-start space-x-3 mt-6">
+                <Checkbox
+                  id="certification"
+                  checked={certificationChecked}
+                  onCheckedChange={(checked) => setCertificationChecked(checked as boolean)}
+                />
+                <Label htmlFor="certification" className="text-sm">
+                  I certify that this decision complies with the Fair Chance Ordinance and is based solely on legally permissible information.
+                </Label>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 7:
+        return (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold">Candidate Notification</h2>
+            <div className="rounded-lg border p-4 bg-muted">
+              <h3 className="font-semibold mb-2">Notice of Intent to Take Adverse Action</h3>
+              <p className="text-sm text-muted-foreground">
+                You must give the candidate 7 days to respond before proceeding with any adverse action. During this time, no hiring decision may be finalized.
+              </p>
+            </div>
+            <Button
+              onClick={() => setShowNoticeDialog(true)}
+            >
+              Preview & Send Notice
+            </Button>
+          </div>
+        );
+
+      case 8:
         if (showWOTCSigningScreen) {
           return (
             <div className="space-y-6">
@@ -1248,28 +1412,18 @@ export default function AssessmentEvaluate() {
               {steps.map((step) => (
                 <button
                   key={step.id}
-                  className={`w-full p-3 rounded-lg border transition-all duration-200 ${
-                    currentStep === step.id 
-                      ? "bg-cinnabar text-white border-cinnabar shadow-md transform scale-[1.02]" 
-                      : "border-gray-200 hover:bg-secondary/50 hover:border-cinnabar/30"
-                  }`}
+                  className={`w-full p-3 rounded-lg border ${
+                    currentStep === step.id ? "bg-secondary" : ""
+                  } transition-colors hover:bg-secondary/50`}
                   onClick={() => handleStepClick(step.id)}
                 >
                   <div className="flex items-center gap-2">
                     {step.completed ? (
-                      <Check className={`h-4 w-4 ${currentStep === step.id ? "text-white" : "text-green-500"}`} />
-                    ) : currentStep === step.id ? (
-                      <div className="h-4 w-4 rounded-full border-2 border-white bg-white/20" />
+                      <Check className="h-4 w-4 text-green-500" />
                     ) : (
-                      <div className="h-4 w-4 rounded-full border border-gray-300" />
+                      <div className="h-4 w-4 rounded-full border" />
                     )}
-                    <span className={`font-medium ${
-                      currentStep === step.id 
-                        ? "text-white" 
-                        : step.completed 
-                          ? "text-muted-foreground" 
-                          : "text-foreground"
-                    }`}>
+                    <span className={step.completed ? "text-muted-foreground" : ""}>
                       {step.title}
                     </span>
                   </div>
@@ -1303,15 +1457,16 @@ export default function AssessmentEvaluate() {
                 >
                   Previous
                 </Button>
-                {currentStep !== 5 && (
+                {currentStep !== 8 && (
                   <Button
                     className="ia-button-primary bg-cinnabar text-white hover:bg-cinnabar-600 px-5 py-2 rounded-md text-base font-poppins"
-                    onClick={currentStep === 5 ? handleComplete : handleNext}
+                    onClick={currentStep === 8 ? handleComplete : handleNext}
                     disabled={
-                      (currentStep === 1 && !hasConditionalOffer)
+                      (currentStep === 1 && !hasConditionalOffer) ||
+                      (currentStep === 6 && !certificationChecked)
                     }
                   >
-                    {currentStep === 5 ? "Complete" : (
+                    {currentStep === 8 ? "Complete" : (
                       <>
                         Next
                         <ArrowRight className="ml-2 h-4 w-4" />
@@ -1507,7 +1662,7 @@ export default function AssessmentEvaluate() {
           <DialogHeader>
             <DialogTitle>Conditional Offer Required</DialogTitle>
             <DialogDescription>
-              You must extend a conditional offer before accessing or considering conviction history. This is a requirement under Oklahoma's Ban-the-Box law.
+              You must extend a conditional offer before accessing or considering conviction history. This is a requirement under San Francisco's Fair Chance Ordinance.
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end">
